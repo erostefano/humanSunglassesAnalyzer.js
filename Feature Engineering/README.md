@@ -1,17 +1,23 @@
 # Feature Engineering
 
-## Train
+https://www.kaggle.com/datasets/amol07/sunglasses-no-sunglasses
 
-* no_glass: 1776
-* with_glass: 1475
+| Dataset | with_glass | no_glass | % more no_glass |
+|---------|------------|----------|-----------------|
+| Train   | 1475       | 1776     | 20.5%           |
+| Test    | 242        | 362      | 49.6%           |
+| **Sum** | **1717**   | **2138** | **24.6%**       |
 
-## Test
+## Good
 
-* no_glass: 362
-* with_glass: 242
+* 224x224
+* 24-bit color
 
-## Issues
+## Bad
 
 * Unbalanced
 * Train and test not in proportion
 * Unknown balance about gender, ages and ethnicity
+* Warnings about broken pictures
+* Different file formats
+* Unstructured naming
