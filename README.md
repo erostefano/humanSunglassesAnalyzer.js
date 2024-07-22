@@ -1,15 +1,14 @@
-# sunglassDetection.js
+# sunglassesDetection.js
 
 ## Feature Engineering
 
-* Dataset: https://www.kaggle.com/datasets/amol07/sunglasses-no-sunglasses
-* Balance labels
-* Split by train (2/3) and test (1/3)
+* See [Feature Engineering.md](Feature%20Engineering%2FFeature%20Engineering.md)
 
 ## Training
 
 * Deeplearning
 * Param Tuning with https://hyperjs.herokuapp.com/
+* Add confusion matrix with true positive, true negatives, false positives and false negatives
 
 ## Application
 
