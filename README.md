@@ -17,5 +17,4 @@
 
 ## Operation
 
-* Deploy on firebase
-* Add Google Analytics
+* See [Operation.md](Operation%2FOperation.md)
