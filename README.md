@@ -1,5 +1,8 @@
 # sunglassesDetection.js
 
+The focus is on implementing serverless machine learning directly in the browser, using TensorFlow.js to run models
+without the need for a backend server.
+
 ## Feature Engineering
 
 * See [Feature Engineering.md](Feature%20Engineering%2FFeature%20Engineering.md)
