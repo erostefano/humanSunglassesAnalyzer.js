@@ -10,7 +10,7 @@ Operation focuses on the continuous and mostly automatic improvement of the data
 ## Training
 
 - Periodically train and test new models with recent data and improvements.
-- Deploy and sign updated models to production.
+- Sign and deploy updated models to production.
 
 ## Application
 
