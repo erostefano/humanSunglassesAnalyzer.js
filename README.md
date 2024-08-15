@@ -21,3 +21,7 @@ without the need for a backend server.
 ## Operation
 
 * See [Operation.md](Operation%2FOperation.md)
+
+## Thoughts
+
+* Use it inside Google MediaPipe
