@@ -90,8 +90,8 @@ function loadImagesFromFolder(folderPath, label) {
 }
 
 // Load images from both folders
-const withSunglasses = loadImagesFromFolder('../Feature_Engineering/with_sunglasses', 1);
-const withoutSunglasses = loadImagesFromFolder('../Feature_Engineering/without_sunglasses', 0);
+const withSunglasses = loadImagesFromFolder('../feature-engineering/with-sunglasses', 1);
+const withoutSunglasses = loadImagesFromFolder('../feature-engineering/without-sunglasses', 0);
 
 const allImages = withSunglasses.images.concat(withoutSunglasses.images);
 
