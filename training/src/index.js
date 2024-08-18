@@ -93,11 +93,6 @@ function loadImagesFromFolder(folderPath, label) {
 const withSunglasses = loadImagesFromFolder('../feature-engineering/with-sunglasses', 1);
 const withoutSunglasses = loadImagesFromFolder('../feature-engineering/without-sunglasses', 0);
 
-// Ensure that images and labels are loaded correctly
-if (!withSunglasses || !withoutSunglasses) {
-    throw new Error("Failed to load images from one or both folders.");
-}
-
 const withSunglassesImages = withSunglasses.images;
 const withSunglassesLabels = new Array(withSunglassesImages.length).fill(withSunglasses.label);
 
@@ -163,6 +158,7 @@ model.fit(xTrain, yTrain, {
 })
     .then(info => {
         console.log('Training Complete');
+        console.table(info);
         console.log('Final training accuracy:', info.history.acc);
         console.log('Final validation accuracy:', info.history.val_acc);
 
@@ -172,6 +168,7 @@ model.fit(xTrain, yTrain, {
     .then(testResult => {
         // If you have multiple metrics, testResult will be an array of tensors
         // Example: [lossTensor, accuracyTensor]
+        console.table(testResult);
         const [lossTensor, accuracyTensor] = testResult;
 
         // Convert tensors to arrays and print the results
@@ -181,7 +178,8 @@ model.fit(xTrain, yTrain, {
         // Save the model after evaluation
         return model.save('file://model');
     })
-    .then(() => {
+    .then((asdf) => {
+        console.table(asdf);
         console.log('Model saved to disk');
     })
     .catch(error => {
