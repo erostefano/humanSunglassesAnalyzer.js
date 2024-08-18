@@ -5,7 +5,7 @@ without the need for a backend server.
 
 ## Feature Engineering
 
-* See [Feature Engineering.md](Feature%20Engineering%2FFeature%20Engineering.md)
+* See [Feature Engineering.md](feature-engineering%2FFeature%20Engineering.md)
 
 ## Training
 
