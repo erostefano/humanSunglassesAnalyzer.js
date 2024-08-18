@@ -111,7 +111,6 @@ const trainSize = Math.floor(0.66 * xData.shape[0]);
 const xTrain = xData.slice([0, 0, 0, 0], [trainSize, 224, 224, 3]);
 const yTrain = allLabels.slice([0, 0], [trainSize, 1]);
 
-// Train the model
 model.fit(xTrain, yTrain, {
     epochs: 10,             // Number of epochs
     batchSize: 32,          // Number of samples per gradient update
@@ -121,33 +120,28 @@ model.fit(xTrain, yTrain, {
         console.log('Training Complete');
         console.log('Final training accuracy:', info.history.acc);
         console.log('Final validation accuracy:', info.history.val_acc);
+
+        // After training is complete, evaluate the model
+
+        const xTest = xData.slice([trainSize, 0, 0, 0], [xData.shape[0] - trainSize, 224, 224, 3]);
+        const yTest = allLabels.slice([trainSize, 0], [allLabels.shape[0] - trainSize, 1]);
+        return model.evaluate(xTest, yTest);
     })
-    .catch(error => {
-        console.log(error);
-    });
-
-const xTest = xData.slice([trainSize, 0, 0, 0], [xData.shape[0] - trainSize, 224, 224, 3]);
-const yTest = allLabels.slice([trainSize, 0], [allLabels.shape[0] - trainSize, 1]);
-
-model.evaluate(xTest, yTest)
     .then(testResult => {
         // If you have multiple metrics, testResult will be an array of tensors
         // Example: [lossTensor, accuracyTensor]
         const [lossTensor, accuracyTensor] = testResult;
 
-        // Print the loss and accuracy values
-        console.log('Test Loss:', lossTensor.dataSync()); // Convert tensor to array and log
-        console.log('Test Accuracy:', accuracyTensor.dataSync()); // Convert tensor to array and log
-    })
-    .catch(error => {
-        console.error('Error during evaluation:', error);
-    });
+        // Convert tensors to arrays and print the results
+        console.log('Test Loss:', lossTensor.dataSync());
+        console.log('Test Accuracy:', accuracyTensor.dataSync());
 
-// After training the model, save it to the filesystem
-model.save('model')
+        // Save the model after evaluation
+        return model.save('file://model');
+    })
     .then(() => {
         console.log('Model saved to disk');
     })
     .catch(error => {
-        console.error('Error saving the model:', error);
+        console.error('Error during training, evaluation, or saving:', error);
     });
