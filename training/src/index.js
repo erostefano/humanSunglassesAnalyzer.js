@@ -93,23 +93,68 @@ function loadImagesFromFolder(folderPath, label) {
 const withSunglasses = loadImagesFromFolder('../feature-engineering/with-sunglasses', 1);
 const withoutSunglasses = loadImagesFromFolder('../feature-engineering/without-sunglasses', 0);
 
-const allImages = withSunglasses.images.concat(withoutSunglasses.images);
+// Ensure that images and labels are loaded correctly
+if (!withSunglasses || !withoutSunglasses) {
+    throw new Error("Failed to load images from one or both folders.");
+}
 
-const allLabels = tf.tensor2d(
-    new Array(withSunglasses.images.length).fill(withSunglasses.label)
-        .concat(new Array(withoutSunglasses.images.length).fill(withoutSunglasses.label)),
-    [allImages.length, 1]
-);
+const withSunglassesImages = withSunglasses.images;
+const withSunglassesLabels = new Array(withSunglassesImages.length).fill(withSunglasses.label);
 
-// Convert the list of images into a 4D tensor
-const xData = tf.stack(allImages);
+const withoutSunglassesImages = withoutSunglasses.images;
+const withoutSunglassesLabels = new Array(withoutSunglassesImages.length).fill(withoutSunglasses.label);
 
-// Calculate the split index for 66% training and 33% testing
-const trainSize = Math.floor(0.66 * xData.shape[0]);
+// Log the size of each feature before splitting
+console.log('Total with Sunglasses images:', withSunglassesImages.length);
+console.log('Total with Sunglasses labels:', withSunglassesLabels.length);
+console.log('Total without Sunglasses images:', withoutSunglassesImages.length);
+console.log('Total without Sunglasses labels:', withoutSunglassesLabels.length);
 
-// Split the data into training and testing sets
-const xTrain = xData.slice([0, 0, 0, 0], [trainSize, 224, 224, 3]);
-const yTrain = allLabels.slice([0, 0], [trainSize, 1]);
+// Calculate split index for 66% training data
+const splitIndexWithSunglasses = Math.floor(0.66 * withSunglassesImages.length);
+const splitIndexWithoutSunglasses = Math.floor(0.66 * withoutSunglassesImages.length);
+
+// Log split indices
+console.log('Split index for with Sunglasses:', splitIndexWithSunglasses);
+console.log('Split index for without Sunglasses:', splitIndexWithoutSunglasses);
+
+// Split images and labels for each class
+const withSunglassesTrainImages = withSunglassesImages.slice(0, splitIndexWithSunglasses);
+const withSunglassesTrainLabels = withSunglassesLabels.slice(0, splitIndexWithSunglasses);
+
+const withSunglassesTestImages = withSunglassesImages.slice(splitIndexWithSunglasses);
+const withSunglassesTestLabels = withSunglassesLabels.slice(splitIndexWithSunglasses);
+
+const withoutSunglassesTrainImages = withoutSunglassesImages.slice(0, splitIndexWithoutSunglasses);
+const withoutSunglassesTrainLabels = withoutSunglassesLabels.slice(0, splitIndexWithoutSunglasses);
+
+const withoutSunglassesTestImages = withoutSunglassesImages.slice(splitIndexWithoutSunglasses);
+const withoutSunglassesTestLabels = withoutSunglassesLabels.slice(splitIndexWithoutSunglasses);
+
+// Log the size of each feature after splitting
+console.log('Training images with Sunglasses:', withSunglassesTrainImages.length);
+console.log('Training labels with Sunglasses:', withSunglassesTrainLabels.length);
+console.log('Testing images with Sunglasses:', withSunglassesTestImages.length);
+console.log('Testing labels with Sunglasses:', withSunglassesTestLabels.length);
+
+console.log('Training images without Sunglasses:', withoutSunglassesTrainImages.length);
+console.log('Training labels without Sunglasses:', withoutSunglassesTrainLabels.length);
+console.log('Testing images without Sunglasses:', withoutSunglassesTestImages.length);
+console.log('Testing labels without Sunglasses:', withoutSunglassesTestLabels.length);
+
+// Combine training data and labels
+const xTrain = tf.stack(withSunglassesTrainImages.concat(withoutSunglassesTrainImages));
+const yTrain = tf.tensor2d(withSunglassesTrainLabels.concat(withoutSunglassesTrainLabels), [xTrain.shape[0], 1]);
+
+// Combine testing data and labels
+const xTest = tf.stack(withSunglassesTestImages.concat(withoutSunglassesTestImages));
+const yTest = tf.tensor2d(withSunglassesTestLabels.concat(withoutSunglassesTestLabels), [xTest.shape[0], 1]);
+
+// Confirm the shapes of your tensors
+console.log('xTrain shape:', xTrain.shape);
+console.log('yTrain shape:', yTrain.shape);
+console.log('xTest shape:', xTest.shape);
+console.log('yTest shape:', yTest.shape);
 
 model.fit(xTrain, yTrain, {
     epochs: 10,             // Number of epochs
@@ -122,9 +167,6 @@ model.fit(xTrain, yTrain, {
         console.log('Final validation accuracy:', info.history.val_acc);
 
         // After training is complete, evaluate the model
-
-        const xTest = xData.slice([trainSize, 0, 0, 0], [xData.shape[0] - trainSize, 224, 224, 3]);
-        const yTest = allLabels.slice([trainSize, 0], [allLabels.shape[0] - trainSize, 1]);
         return model.evaluate(xTest, yTest);
     })
     .then(testResult => {
