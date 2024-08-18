@@ -25,3 +25,4 @@ without the need for a backend server.
 ## Thoughts
 
 * Use it inside Google MediaPipe
+* What is it really necessary to balance the features in CNN?
