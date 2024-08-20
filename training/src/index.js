@@ -64,7 +64,7 @@ cnn.fit(xTrain, yTrain, {
         const yTest = tf.tensor2d(withSunglassesTestLabels.concat(withoutSunglassesTestLabels), [xTest.shape[0], 1]);
         log('yTest shape', yTest.shape);
 
-        return cnn.evaluate(xTest, yTest);
+        return cnn.evaluate(xTest, yTest); // TODO: create a confusion matrix using .predict and the test data
     })
     .then(testResult => {
         log('Testresult', JSON.stringify(testResult))
