@@ -1,9 +1,10 @@
 const fs = require('fs');
 
-function logToFile(message) {
+function log(...messages) {
     const logStream = fs.createWriteStream('logs.txt', {flags: 'a'});
-    logStream.write(`${message}\n`);
+    console.log(messages.join(';'))
+    logStream.write(`${messages.join(';')}\n`);
 }
 
-module.exports = {logToFile};
+module.exports = {log};
 
