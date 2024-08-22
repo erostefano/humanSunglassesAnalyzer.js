@@ -39,6 +39,7 @@ logger.info('xTrain shape', xTrain.shape);
 
 const yTrain = tf.tensor2d(withSunglassesTrainLabels.concat(withoutSunglassesTrainLabels), [xTrain.shape[0], 1]);
 logger.info('yTrain shape', yTrain.shape);
+logger.info('yTrain labels:', yTrain.arraySync());
 
 /**
  * Test data
@@ -59,5 +60,6 @@ logger.info('xTest shape', xTest.shape);
 
 const yTest = tf.tensor2d(withSunglassesTestLabels.concat(withoutSunglassesTestLabels), [xTest.shape[0], 1]);
 logger.info('yTest shape', yTest.shape);
+logger.info('yTest labels:', yTest.arraySync());
 
 module.exports = {xTrain, yTrain, xTest, yTest}
