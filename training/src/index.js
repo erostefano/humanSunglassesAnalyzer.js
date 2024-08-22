@@ -38,11 +38,26 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
     const table = yTest.arraySync().map((labels, index) => {
         const label = labels[0];
         const prediction = predictedLabels[index][0];
+        const pictureIndex = label === 1 ? 1 + 660 + index : 1 + 660 + (index - 340);
+
         return {
             label,
-            prediction
+            prediction,
+            picture: `${label === 1 ? 'with-sunglasses' : 'without-sunglasses'}_${pictureIndex}`
         };
     });
+
+    const withSunglassesNegative = table
+        .filter(row => row.label === 1)
+        .filter(row => row.prediction < 0.5);
+
+    console.table(withSunglassesNegative)
+
+    const withoutSunglassesNegative = table
+        .filter(row => row.label === 0)
+        .filter(row => row.prediction >= 0.5);
+
+    console.table(withoutSunglassesNegative)
 
     const confusionMatrix = table.reduce(
         (acc, {label, prediction}) => {
