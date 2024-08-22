@@ -11,9 +11,9 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
 
 (async () => {
     const history = await cnn.fit(xTrain, yTrain, {
-        epochs: 10,             // Number of epochs
-        batchSize: 32,          // Number of samples per gradient update
-        callbacks: tf.callbacks.earlyStopping({patience: 3}) // Optional: stops training early if no improvement
+        epochs: 1,                                                  // Number of epochs
+        batchSize: 32,                                              // Number of samples per gradient update
+        callbacks: tf.callbacks.earlyStopping({patience: 3})   // Optional: stops training early if no improvement
     });
 
     logger.info('Training completed');
@@ -25,8 +25,16 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
     logger.info('Test result', JSON.stringify(testResult))
 
     const [lossTensor, accuracyTensor] = testResult;
-    logger.info('Test Loss', lossTensor.dataSync());
-    logger.info('Test Accuracy', accuracyTensor.dataSync());
+    logger.info('Test loss', lossTensor.dataSync());
+    logger.info('Test accuracy', accuracyTensor.dataSync());
+
+    const predictions = cnn.predict(xTest);
+    const predictedLabels = predictions.arraySync();
+
+    logger.info('Predicted Labels', predictedLabels)
+    logger.info('Predicted Labels Size', predictedLabels.length)
+    logger.info('Expected Labels', yTest.arraySync())
+    logger.info('Expected Labels', yTest.arraySync().length)
 
     await cnn.save('file://model');
 })();
