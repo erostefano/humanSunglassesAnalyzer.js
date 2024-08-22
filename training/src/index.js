@@ -44,7 +44,27 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
         };
     });
 
-    console.table(table)
+    const confusionMatrix = table.reduce(
+        (acc, {label, prediction}) => {
+            if (label === 1) {
+                prediction >= 0.5 ? acc.withSunglassesPositive++ : acc.withSunglassesNegative++;
+            }
+
+            if (label === 0) {
+                prediction < 0.5 ? acc.withoutSunglassesPositive++ : acc.withoutSunglassesNegative++;
+            }
+
+            return acc;
+        },
+        {
+            withSunglassesPositive: 0,
+            withSunglassesNegative: 0,
+            withoutSunglassesPositive: 0,
+            withoutSunglassesNegative: 0
+        }
+    );
+
+    console.table(confusionMatrix)
 
     await cnn.save('file://model');
 })();
