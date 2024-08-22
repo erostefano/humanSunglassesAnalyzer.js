@@ -28,3 +28,4 @@ TensorFlow.js to run machine learning models directly in the browser, so there's
 * What is it really necessary to balance the features in CNN?
 * Not reproducible -> Missing Seed
 * Code needs unit tests
+* Store a sidecar to each model including loss, accuracy and confusion matrix
