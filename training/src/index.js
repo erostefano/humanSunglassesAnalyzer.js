@@ -1,3 +1,9 @@
+// TODO: externalize train and test data
+// TODO: replace logger
+// TODO: create a confusion matrix using .predict and the test data
+// TODO: use async
+// TODO: creating multiple models using different configs
+
 const tf = require('@tensorflow/tfjs-node');
 const {cnn} = require("./model");
 const {loadImagesFromFolder} = require("./util");
@@ -64,7 +70,7 @@ cnn.fit(xTrain, yTrain, {
         const yTest = tf.tensor2d(withSunglassesTestLabels.concat(withoutSunglassesTestLabels), [xTest.shape[0], 1]);
         log('yTest shape', yTest.shape);
 
-        return cnn.evaluate(xTest, yTest); // TODO: create a confusion matrix using .predict and the test data
+        return cnn.evaluate(xTest, yTest);
     })
     .then(testResult => {
         log('Testresult', JSON.stringify(testResult))
