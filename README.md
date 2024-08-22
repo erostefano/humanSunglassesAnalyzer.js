@@ -1,7 +1,7 @@
-# sunglassesDetection.js
+# humanSunglassesAnalyzer.js
 
-The focus is on implementing serverless machine learning directly in the browser, using TensorFlow.js to run models
-without the need for a backend server.
+This project is designed to analyze images and determine whether a person is wearing sunglasses. This project uses
+TensorFlow.js to run machine learning models directly in the browser, so there's no need for a backend server.
 
 ## Feature Engineering
 
