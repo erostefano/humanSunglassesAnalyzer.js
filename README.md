@@ -27,3 +27,4 @@ without the need for a backend server.
 * Use it inside Google MediaPipe
 * What is it really necessary to balance the features in CNN?
 * Not reproducible -> Missing Seed
+* Code needs unit tests
