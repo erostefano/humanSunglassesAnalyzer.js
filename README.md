@@ -26,3 +26,5 @@ TensorFlow.js to run machine learning models directly in the browser, so there's
 
 * Use it inside Google MediaPipe
 * What is it really necessary to balance the features in CNN?
+* Not reproducible -> Missing Seed
+* Code needs unit tests

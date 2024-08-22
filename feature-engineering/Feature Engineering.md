@@ -3,10 +3,10 @@
 [Kaggle Dataset: Sunglasses vs. No Sunglasses](https://www.kaggle.com/datasets/amol07/sunglasses-no-sunglasses)
 
 | Dataset   | With Sunglasses | Without Sunglasses | % More Without Sunglasses |
-|-----------|-----------------|---------------|----------------------|
-| Train     | 1475            | 1776          | 20.5%                |
-| Test      | 242             | 362           | 49.6%                |
-| **Total** | **1717**        | **2138**      | **24.6%**            |
+|-----------|-----------------|--------------------|---------------------------|
+| Train     | 1475            | 1776               | 20.5%                     |
+| Test      | 242             | 362                | 49.6%                     |
+| **Total** | **1717**        | **2138**           | **24.6%**                 |
 
 ## Good
 
@@ -30,5 +30,5 @@
 * Renamed the files for consistency.
 
 | With Sunglasses | Without Sunglasses |
-|-----------------|---------------|
-| 1000            | 1000          |
+|-----------------|--------------------|
+| 1000            | 1000               |

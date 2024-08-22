@@ -14,6 +14,6 @@ Operation focuses on the continuous and mostly automatic improvement of the data
 
 ## Application
 
+- Include Google Analytics to gain insights about the users.
 - Implement client-side performance logging.
 - Allow users to provide feedback and submit images.
-- Include Google Analytics to gain insights about the users.
