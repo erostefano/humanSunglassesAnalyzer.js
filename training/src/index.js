@@ -10,7 +10,7 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
 
 (async () => {
     const history = await cnn.fit(xTrain, yTrain, {
-        epochs: 1,                                                  // Number of epochs
+        epochs: 10,                                                  // Number of epochs
         batchSize: 32,                                              // Number of samples per gradient update
         callbacks: tf.callbacks.earlyStopping({patience: 3})   // Optional: stops training early if no improvement
     });
@@ -51,12 +51,14 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
         .filter(row => row.label === 1)
         .filter(row => row.prediction < 0.5);
 
+    logger.info('withSunglassesNegative', JSON.stringify(withSunglassesNegative))
     console.table(withSunglassesNegative)
 
     const withoutSunglassesNegative = table
         .filter(row => row.label === 0)
         .filter(row => row.prediction >= 0.5);
 
+    logger.info('withoutSunglassesNegative', JSON.stringify(withoutSunglassesNegative))
     console.table(withoutSunglassesNegative)
 
     const confusionMatrix = table.reduce(
@@ -79,6 +81,7 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
         }
     );
 
+    logger.info('confusionMatrix', JSON.stringify(confusionMatrix))
     console.table(confusionMatrix)
 
     await cnn.save('file://model');
