@@ -1,11 +1,13 @@
-// TODO: replace logger
 // TODO: create a confusion matrix using .predict and the test data
 // TODO: use async
 // TODO: creating multiple models using different configs
 
 const tf = require('@tensorflow/tfjs-node');
 const {cnn} = require("./model");
-const {log} = require("./logger");
+const logger = require("./logger");
+
+logger.info('Start training');
+
 const {xTrain, yTrain, xTest, yTest} = require("./data");
 
 cnn.fit(xTrain, yTrain, {
@@ -14,25 +16,25 @@ cnn.fit(xTrain, yTrain, {
     callbacks: tf.callbacks.earlyStopping({patience: 3}) // Optional: stops training early if no improvement
 })
     .then(history => {
-        log('Training completed');
-        log('History', JSON.stringify(history));
-        log('Final training accuracy', history.history.acc);
-        log('Final validation accuracy', history.history.val_acc);
+        logger.info('Training completed');
+        logger.info('History', JSON.stringify(history));
+        logger.info('Final training accuracy', history.history.acc);
+        logger.info('Final validation accuracy', history.history.val_acc);
 
         return cnn.evaluate(xTest, yTest);
     })
     .then(testResult => {
-        log('Testresult', JSON.stringify(testResult))
+        logger.info('Testresult', JSON.stringify(testResult))
         const [lossTensor, accuracyTensor] = testResult;
 
-        log('Test Loss', lossTensor.dataSync());
-        log('Test Accuracy', accuracyTensor.dataSync());
+        logger.info('Test Loss', lossTensor.dataSync());
+        logger.info('Test Accuracy', accuracyTensor.dataSync());
 
         return cnn.save('file://model');
     })
     .then(() => {
-        log('Model saved to disk');
+        logger.info('Model saved to disk');
     })
     .catch(error => {
-        error('Error during training, evaluation, or saving', error);
+        logger.error('Error during training, evaluation, or saving', error);
     });

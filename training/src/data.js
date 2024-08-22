@@ -1,5 +1,5 @@
 const {loadImagesFromFolder} = require("./util");
-const {log} = require("./logger");
+const logger = require("./logger");
 const tf = require("@tensorflow/tfjs-node");
 
 /**
@@ -8,56 +8,56 @@ const tf = require("@tensorflow/tfjs-node");
 
 const withSunglasses = loadImagesFromFolder('../feature-engineering/with-sunglasses', 1);
 const withSunglassesImages = withSunglasses.images;
-log('Total with Sunglasses images', withSunglassesImages.length);
+logger.info('Total with Sunglasses images', withSunglassesImages.length);
 const withSunglassesLabels = new Array(withSunglassesImages.length).fill(withSunglasses.label);
-log('Total with Sunglasses labels', withSunglassesLabels.length);
+logger.info('Total with Sunglasses labels', withSunglassesLabels.length);
 
 const withoutSunglasses = loadImagesFromFolder('../feature-engineering/without-sunglasses', 0);
 const withoutSunglassesImages = withoutSunglasses.images;
-log('Total without Sunglasses images', withoutSunglassesImages.length);
+logger.info('Total without Sunglasses images', withoutSunglassesImages.length);
 const withoutSunglassesLabels = new Array(withoutSunglassesImages.length).fill(withoutSunglasses.label);
-log('Total without Sunglasses labels', withoutSunglassesLabels.length);
+logger.info('Total without Sunglasses labels', withoutSunglassesLabels.length);
 
 const splitIndexWithSunglasses = Math.floor(0.66 * withSunglassesImages.length);
-log('Split index for with Sunglasses', splitIndexWithSunglasses);
+logger.info('Split index for with Sunglasses', splitIndexWithSunglasses);
 
 const splitIndexWithoutSunglasses = Math.floor(0.66 * withoutSunglassesImages.length);
-log('Split index for without Sunglasses', splitIndexWithoutSunglasses);
+logger.info('Split index for without Sunglasses', splitIndexWithoutSunglasses);
 
 const withSunglassesTrainImages = withSunglassesImages.slice(0, splitIndexWithSunglasses);
-log('Training images with Sunglasses', withSunglassesTrainImages.length);
+logger.info('Training images with Sunglasses', withSunglassesTrainImages.length);
 const withSunglassesTrainLabels = withSunglassesLabels.slice(0, splitIndexWithSunglasses);
-log('Training labels with Sunglasses', withSunglassesTrainLabels.length);
+logger.info('Training labels with Sunglasses', withSunglassesTrainLabels.length);
 
 const withoutSunglassesTrainImages = withoutSunglassesImages.slice(0, splitIndexWithoutSunglasses);
-log('Training images without Sunglasses', withoutSunglassesTrainImages.length);
+logger.info('Training images without Sunglasses', withoutSunglassesTrainImages.length);
 const withoutSunglassesTrainLabels = withoutSunglassesLabels.slice(0, splitIndexWithoutSunglasses);
-log('Training labels without Sunglasses', withoutSunglassesTrainLabels.length);
+logger.info('Training labels without Sunglasses', withoutSunglassesTrainLabels.length);
 
 const xTrain = tf.stack(withSunglassesTrainImages.concat(withoutSunglassesTrainImages));
-log('xTrain shape', xTrain.shape);
+logger.info('xTrain shape', xTrain.shape);
 
 const yTrain = tf.tensor2d(withSunglassesTrainLabels.concat(withoutSunglassesTrainLabels), [xTrain.shape[0], 1]);
-log('yTrain shape', yTrain.shape);
+logger.info('yTrain shape', yTrain.shape);
 
 /**
  * Test data
  */
 
 const withSunglassesTestImages = withSunglassesImages.slice(splitIndexWithSunglasses);
-log('Testing images with Sunglasses', withSunglassesTestImages.length);
+logger.info('Testing images with Sunglasses', withSunglassesTestImages.length);
 const withSunglassesTestLabels = withSunglassesLabels.slice(splitIndexWithSunglasses);
-log('Testing labels with Sunglasses', withSunglassesTestLabels.length);
+logger.info('Testing labels with Sunglasses', withSunglassesTestLabels.length);
 
 const withoutSunglassesTestImages = withoutSunglassesImages.slice(splitIndexWithoutSunglasses);
-log('Testing images without Sunglasses', withoutSunglassesTestImages.length);
+logger.info('Testing images without Sunglasses', withoutSunglassesTestImages.length);
 const withoutSunglassesTestLabels = withoutSunglassesLabels.slice(splitIndexWithoutSunglasses);
-log('Testing labels without Sunglasses', withoutSunglassesTestLabels.length);
+logger.info('Testing labels without Sunglasses', withoutSunglassesTestLabels.length);
 
 const xTest = tf.stack(withSunglassesTestImages.concat(withoutSunglassesTestImages));
-log('xTest shape', xTest.shape);
+logger.info('xTest shape', xTest.shape);
 
 const yTest = tf.tensor2d(withSunglassesTestLabels.concat(withoutSunglassesTestLabels), [xTest.shape[0], 1]);
-log('yTest shape', yTest.shape);
+logger.info('yTest shape', yTest.shape);
 
 module.exports = {xTrain, yTrain, xTest, yTest}
