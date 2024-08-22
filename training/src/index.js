@@ -18,11 +18,11 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
 
     logger.info('Training completed');
     logger.info('History', JSON.stringify(history));
-    logger.info('Final training accuracy', history.history.acc);
-    logger.info('Final validation accuracy', history.history.val_acc);
+    logger.info('Training loss', history.history.loss);
+    logger.info('Training accuracy', history.history.acc);
 
     const testResult = cnn.evaluate(xTest, yTest);
-    logger.info('Testresult', JSON.stringify(testResult))
+    logger.info('Test result', JSON.stringify(testResult))
 
     const [lossTensor, accuracyTensor] = testResult;
     logger.info('Test Loss', lossTensor.dataSync());
