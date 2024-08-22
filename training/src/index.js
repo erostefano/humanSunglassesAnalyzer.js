@@ -43,7 +43,7 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
         return {
             label,
             prediction,
-            picture: `${label === 1 ? 'with-sunglasses' : 'without-sunglasses'}_${pictureIndex}`
+            picture: `${label === 1 ? 'with-sunglasses' : 'without-sunglasses'}-${pictureIndex}`
         };
     });
 
