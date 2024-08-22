@@ -1,4 +1,3 @@
-// TODO: create a confusion matrix using .predict and the test data
 // TODO: creating multiple models using different configs
 
 const tf = require('@tensorflow/tfjs-node');
@@ -35,6 +34,17 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
     logger.info('Predicted Labels Size', predictedLabels.length)
     logger.info('Expected Labels', yTest.arraySync())
     logger.info('Expected Labels', yTest.arraySync().length)
+
+    const table = yTest.arraySync().map((labels, index) => {
+        const label = labels[0];
+        const prediction = predictedLabels[index][0];
+        return {
+            label,
+            prediction
+        };
+    });
+
+    console.table(table)
 
     await cnn.save('file://model');
 })();
