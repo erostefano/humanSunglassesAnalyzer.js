@@ -38,7 +38,21 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
     const table = yTest.arraySync().map((labels, index) => {
         const label = labels[0];
         const prediction = predictedLabels[index][0];
-        const pictureIndex = label === 1 ? 1 + 660 + index : 1 + 660 + (index - 340);
+
+        /*
+            Every test picture starts at Nr. 661 (not the index)
+
+            Calculation to get the pictures using the index:
+            - With Sunglasses:
+                - First el: 0 + 661 = 661
+                - Last el: 339 + 661 = 1000
+            - Without Sunglasses:
+                - First el: 340 + 321 = 661
+                - Last el: 679 + 321 = 661
+         */
+        const pictureIndex = label === 1
+            ? index + 661
+            : index + 321
 
         return {
             label,
