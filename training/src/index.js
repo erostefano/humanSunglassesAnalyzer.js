@@ -52,7 +52,7 @@ const {labelsWithEncoding} = require("./labels");
                 - Last el: 339 + 661 = 1000
             - Without Sunglasses:
                 - First el: 340 + 321 = 661
-                - Last el: 679 + 321 = 661
+                - Last el: 679 + 321 = 1000
          */
         const pictureIndex = isWithSunglasses
             ? index + 661
