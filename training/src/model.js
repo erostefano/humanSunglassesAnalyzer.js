@@ -55,16 +55,16 @@ cnn.add(tf.layers.dense({
 // Optionally add a dropout layer to reduce overfitting
 //cnn.add(tf.layers.dropout({rate: 0.5}));
 
-// Add the output layer with a single neuron (binary classification)
+// Add the output layer with two neurons (for two classes)
 cnn.add(tf.layers.dense({
-    units: 1,                   // Output unit
-    activation: 'sigmoid'       // Sigmoid activation for binary classification
+    units: 2,                   // Output units for two classes
+    activation: 'softmax'       // Softmax activation for multi-class classification
 }));
 
-// Compile the cnn with a binary cross-entropy loss and an optimizer
+// Compile the cnn with a categorical cross-entropy loss and an optimizer
 cnn.compile({
     optimizer: tf.train.adam(),        // Adam optimizer
-    loss: 'binaryCrossentropy',        // Binary Cross-Entropy loss
+    loss: 'categoricalCrossentropy',   // Categorical Cross-Entropy loss
     metrics: ['accuracy']              // Track accuracy
 });
 

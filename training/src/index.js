@@ -7,6 +7,7 @@ const logger = require("./logger");
 logger.info('Start training');
 
 const {xTrain, yTrain, xTest, yTest} = require("./data");
+const {labelsWithEncoding} = require("./labels");
 
 (async () => {
     const history = await cnn.fit(xTrain, yTrain, {
@@ -35,9 +36,12 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
     logger.info('Expected Labels', yTest.arraySync())
     logger.info('Expected Labels', yTest.arraySync().length)
 
-    const table = yTest.arraySync().map((labels, index) => {
-        const label = labels[0];
-        const prediction = predictedLabels[index][0];
+    const summary = yTest.arraySync().map((labels, index) => {
+        const isWithSunglasses = labels[0] === labelsWithEncoding.withSunglasses.encoding;
+
+        const label = isWithSunglasses
+            ? labelsWithEncoding.withSunglasses.label
+            : labelsWithEncoding.withoutSunglasses.label;
 
         /*
             Every test picture starts at Nr. 661 (not the index)
@@ -50,39 +54,44 @@ const {xTrain, yTrain, xTest, yTest} = require("./data");
                 - First el: 340 + 321 = 661
                 - Last el: 679 + 321 = 661
          */
-        const pictureIndex = label === 1
+        const pictureIndex = isWithSunglasses
             ? index + 661
             : index + 321
 
         return {
             label,
-            prediction,
-            picture: `${label === 1 ? 'with-sunglasses' : 'without-sunglasses'}-${pictureIndex}`
+            withSunglassesPrediction: predictedLabels[index][0],
+            withoutSunglassesPrediction: predictedLabels[index][1],
+            file: `${isWithSunglasses ? 'with-sunglasses' : 'without-sunglasses'}-${pictureIndex}`
         };
     });
 
-    const withSunglassesNegative = table
-        .filter(row => row.label === 1)
-        .filter(row => row.prediction < 0.5);
+    const withSunglassesNegative = summary
+        .filter(row => row.label === labelsWithEncoding.withSunglasses.label)
+        .filter(row => row.withSunglassesPrediction < row.withoutSunglassesPrediction);
 
     logger.info('withSunglassesNegative', JSON.stringify(withSunglassesNegative))
     console.table(withSunglassesNegative)
 
-    const withoutSunglassesNegative = table
-        .filter(row => row.label === 0)
-        .filter(row => row.prediction >= 0.5);
+    const withoutSunglassesNegative = summary
+        .filter(row => row.label === labelsWithEncoding.withoutSunglasses.label)
+        .filter(row => row.withoutSunglassesPrediction < row.withSunglassesPrediction);
 
     logger.info('withoutSunglassesNegative', JSON.stringify(withoutSunglassesNegative))
     console.table(withoutSunglassesNegative)
 
-    const confusionMatrix = table.reduce(
-        (acc, {label, prediction}) => {
-            if (label === 1) {
-                prediction >= 0.5 ? acc.withSunglassesPositive++ : acc.withSunglassesNegative++;
+    const confusionMatrix = summary.reduce(
+        (acc, row) => {
+            if (row.label === labelsWithEncoding.withSunglasses.label) {
+                row.withSunglassesPrediction > row.withoutSunglassesPrediction
+                    ? acc.withSunglassesPositive++
+                    : acc.withSunglassesNegative++;
             }
 
-            if (label === 0) {
-                prediction < 0.5 ? acc.withoutSunglassesPositive++ : acc.withoutSunglassesNegative++;
+            if (row.label === labelsWithEncoding.withoutSunglasses.label) {
+                row.withoutSunglassesPrediction > row.withSunglassesPrediction
+                    ? acc.withoutSunglassesPositive++
+                    : acc.withoutSunglassesNegative++
             }
 
             return acc;

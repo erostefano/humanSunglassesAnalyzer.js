@@ -6,13 +6,13 @@ const tf = require("@tensorflow/tfjs-node");
  * Training data
  */
 
-const withSunglasses = loadImagesFromFolder('../feature-engineering/with-sunglasses', 1);
+const withSunglasses = loadImagesFromFolder('../feature-engineering/with-sunglasses', [1, 0]);
 const withSunglassesImages = withSunglasses.images;
 logger.info('Total with Sunglasses images', withSunglassesImages.length);
 const withSunglassesLabels = new Array(withSunglassesImages.length).fill(withSunglasses.label);
 logger.info('Total with Sunglasses labels', withSunglassesLabels.length);
 
-const withoutSunglasses = loadImagesFromFolder('../feature-engineering/without-sunglasses', 0);
+const withoutSunglasses = loadImagesFromFolder('../feature-engineering/without-sunglasses', [0, 1]);
 const withoutSunglassesImages = withoutSunglasses.images;
 logger.info('Total without Sunglasses images', withoutSunglassesImages.length);
 const withoutSunglassesLabels = new Array(withoutSunglassesImages.length).fill(withoutSunglasses.label);
@@ -37,7 +37,7 @@ logger.info('Training labels without Sunglasses', withoutSunglassesTrainLabels.l
 const xTrain = tf.stack(withSunglassesTrainImages.concat(withoutSunglassesTrainImages));
 logger.info('xTrain shape', xTrain.shape);
 
-const yTrain = tf.tensor2d(withSunglassesTrainLabels.concat(withoutSunglassesTrainLabels), [xTrain.shape[0], 1]);
+const yTrain = tf.tensor2d(withSunglassesTrainLabels.concat(withoutSunglassesTrainLabels), [xTrain.shape[0], 2]);
 logger.info('yTrain shape', yTrain.shape);
 logger.info('yTrain labels:', yTrain.arraySync());
 
@@ -58,8 +58,8 @@ logger.info('Testing labels without Sunglasses', withoutSunglassesTestLabels.len
 const xTest = tf.stack(withSunglassesTestImages.concat(withoutSunglassesTestImages));
 logger.info('xTest shape', xTest.shape);
 
-const yTest = tf.tensor2d(withSunglassesTestLabels.concat(withoutSunglassesTestLabels), [xTest.shape[0], 1]);
+const yTest = tf.tensor2d(withSunglassesTestLabels.concat(withoutSunglassesTestLabels), [xTest.shape[0], 2]);
 logger.info('yTest shape', yTest.shape);
 logger.info('yTest labels:', yTest.arraySync());
 
-module.exports = {xTrain, yTrain, xTest, yTest}
+module.exports = {xTrain, yTrain, xTest, yTest};
