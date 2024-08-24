@@ -9,9 +9,7 @@ TensorFlow.js to run machine learning models directly in the browser, so there's
 
 ## Training
 
-* Deeplearning
-* Param Tuning with https://hyperjs.herokuapp.com/
-* Add confusion matrix with true positive, true negatives, false positives and false negatives
+* See [Training.md](training%2FTraining.md)
 
 ## Application
 
