@@ -27,3 +27,8 @@ Image 1: 0.8 = with sunglasses, 0.2 = without sunglasses
 TODO: mention param tuning
 TODO: add training/test loss and accuracy, confusion matrix and false negatives, sum up everything
 TODO: write about storing models including sidecars container loss, accuracy and commit id for images
+TODO: model is trained on close ups. it doesnt work nice on webcam. potential fixes:
+- train it more
+- fix it in the frontend using a mask and cutting the picture
+- use face-api model to get the face and predict it
+- move this model into a media pipe
