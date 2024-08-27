@@ -94,7 +94,18 @@
 
                 // Run inference
                 const predictions = await model.predict(batchedTensor);
+// Convert predictions to an array to see the values
+                const predictionsArray = predictions.arraySync();
 
+// Log the predictions
+                console.log(predictionsArray);
+
+// Dispose of tensors to avoid memory leaks
+                tensor.dispose();
+                resizedTensor.dispose();
+                normalizedTensor.dispose();
+                batchedTensor.dispose();
+                predictions.dispose();
                 console.log(999, predictions)
 
             } else {
