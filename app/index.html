@@ -1,16 +1,20 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Detection with TensorFlow.js</title>
     <script
             src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js"
             crossorigin="anonymous"
             type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script> <!-- Include TensorFlow.js -->
 </head>
 <body>
 <h1>Face Detection Example</h1>
 <img id="image" src="example.jpeg"> <!-- Hide original image -->
 <h2>Detected Face</h2>
-<canvas id="faceCanvas" style="border: 1px solid black; display: none"></canvas>
-</body>
+<canvas id="faceCanvas" style="border: 1px solid black;display: none"></canvas>
 <script type="module">
     import {FilesetResolver, FaceDetector} from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js';
 
@@ -29,8 +33,7 @@
             }
         );
 
-        const img = new Image();
-        img.src = 'example.jpeg'; // Ensure this path is correct
+        const img = document.getElementById('image');
         img.crossOrigin = 'anonymous'; // Allow cross-origin requests if needed
 
         // Wait for the image to be loaded
@@ -51,10 +54,9 @@
 
         try {
             const detections = await faceDetector.detect(imageData);
-            console.log('Detections asdf:', detections);
+            console.log('Detections:', detections);
 
-            if (detections) {
-                console.log(33)
+            if (detections && detections.detections.length > 0) {
                 // Assuming the first detection is the face we want
                 const face = detections.detections[0];
                 const {originX, originY, width, height} = face.boundingBox;
@@ -76,7 +78,25 @@
                 // Optionally create a new image element from the canvas
                 const faceImage = new Image();
                 faceImage.src = faceCanvas.toDataURL();
+                faceImage.id = 'face'
                 document.body.appendChild(faceImage);
+
+                // Load a TensorFlow.js model
+                const model = await tf.loadLayersModel('shared/models/sunglasses/model.json');
+
+                const tensor = tf.browser.fromPixels(document.getElementById('face'));
+
+                const resizedTensor = tf.image.resizeBilinear(tensor, [224, 224]); // Use your model's input size
+                const normalizedTensor = resizedTensor.toFloat().div(tf.scalar(255)); // Normalize if needed
+
+                // Expand dimensions to match model's input shape (typically [batchSize, height, width, channels])
+                const batchedTensor = normalizedTensor.expandDims(0);
+
+                // Run inference
+                const predictions = await model.predict(batchedTensor);
+
+                console.log(999, predictions)
+
             } else {
                 console.log('No faces detected');
             }
@@ -87,4 +107,5 @@
 
     runFaceDetection();
 </script>
+</body>
 </html>
