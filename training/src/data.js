@@ -7,13 +7,13 @@ const tf = require("@tensorflow/tfjs-node");
  */
 
 const withSunglasses = loadImagesFromFolder('../feature-engineering/with-sunglasses', [1, 0]);
-const withSunglassesImages = withSunglasses.images;
+const withSunglassesImages = augmentImages(withSunglasses.images);
 logger.info('Total with Sunglasses images', withSunglassesImages.length);
 const withSunglassesLabels = new Array(withSunglassesImages.length).fill(withSunglasses.label);
 logger.info('Total with Sunglasses labels', withSunglassesLabels.length);
 
 const withoutSunglasses = loadImagesFromFolder('../feature-engineering/without-sunglasses', [0, 1]);
-const withoutSunglassesImages = withoutSunglasses.images;
+const withoutSunglassesImages = augmentImages(withoutSunglasses.images);
 logger.info('Total without Sunglasses images', withoutSunglassesImages.length);
 const withoutSunglassesLabels = new Array(withoutSunglassesImages.length).fill(withoutSunglasses.label);
 logger.info('Total without Sunglasses labels', withoutSunglassesLabels.length);
@@ -63,3 +63,23 @@ logger.info('yTest shape', yTest.shape);
 logger.info('yTest labels:', yTest.arraySync());
 
 module.exports = {xTrain, yTrain, xTest, yTest};
+
+function augmentImages(images) {
+    return images
+        .map(image => {
+            // Add a batch dimension to make the image 4D
+            const batchedImage = image.expandDims(0); // Shape becomes [1, height, width, channels]
+
+            // Perform the flip
+            const flippedImage = tf.image.flipLeftRight(batchedImage);
+
+            // Remove the batch dimension after flipping
+            const unbatchedFlippedImage = flippedImage.squeeze(0); // Shape returns to [height, width, channels]
+
+            return [
+                image,                  // Original image
+                unbatchedFlippedImage,  // Flipped image
+            ];
+        })
+        .flat(); // Flatten the nested arrays
+}

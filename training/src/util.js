@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 function loadImage(filePath) {
-    const buffer = fs.readFileSync(filePath);// Read the image file
+    const buffer = fs.readFileSync(filePath); // Read the image file
     const imageTensor = tf.node.decodeImage(buffer, 3); // Decode the image to a tensor
     const resizedImage = tf.image.resizeBilinear(imageTensor, [224, 224]); // Resize to 224x224
     return resizedImage.div(255.0);
@@ -15,4 +15,4 @@ function loadImagesFromFolder(folderPath, label) {
     return {images, label};
 }
 
-module.exports = {loadImagesFromFolder}
+module.exports = {loadImagesFromFolder};

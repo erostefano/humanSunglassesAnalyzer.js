@@ -48,15 +48,15 @@ const {labelsWithEncoding} = require("./labels");
 
             Calculation to get the pictures using the index:
             - With Sunglasses:
-                - First el: 0 + 661 = 661
-                - Last el: 339 + 661 = 1000
+                - First el : 0 + 661 = 661
+                - Last el  : 339 + 661 = 1000
             - Without Sunglasses:
-                - First el: 340 + 321 = 661
-                - Last el: 679 + 321 = 1000
+                - First el : 340 + 321 = 661
+                - Last el  : 679 + 321 = 1000
          */
         const pictureIndex = isWithSunglasses
-            ? index + 661
-            : index + 321
+            ? Math.floor(index / 2) + 661
+            : Math.floor(index / 2) + 321
 
         return {
             label,

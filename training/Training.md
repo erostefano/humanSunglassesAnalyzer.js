@@ -4,6 +4,10 @@ The model is trained in a Node.js environment using the TensorFlow.js library.
 
 ## Convolutional Neural Network
 
+TODO: mention preprocessing
+
+TODO: mention data augmentation
+
 TODO: brief cnn architecture, mention missing seed
 
 ### Output Units
@@ -25,8 +29,11 @@ Image 1: 0.8 = with sunglasses, 0.2 = without sunglasses
 ```
 
 TODO: mention param tuning
+
 TODO: add training/test loss and accuracy, confusion matrix and false negatives, sum up everything
+
 TODO: write about storing models including sidecars container loss, accuracy and commit id for images
+
 TODO: model is trained on close ups. it doesnt work nice on webcam. potential fixes:
 - train it more
 - fix it in the frontend using a mask and cutting the picture
