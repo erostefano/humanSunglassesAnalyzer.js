@@ -1,0 +1,62 @@
+<html>
+<head>
+    <script
+            src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js"
+            crossorigin="anonymous"
+            type="module"></script>
+</head>
+<body>
+<h1>Face Detection Example</h1>
+<img id="image" src="example.jpeg"> <!-- Hide original image -->
+</body>
+<script type="module">
+    import { FilesetResolver, FaceDetector } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js';
+
+    async function runFaceDetection() {
+        const vision = await FilesetResolver.forVisionTasks(
+            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+        );
+
+        const faceDetector = await FaceDetector.createFromOptions(
+            vision,
+            {
+                baseOptions: {
+                    modelAssetPath: "shared/models/blaze_face_short_range.tflite"
+                },
+                runningMode: 'IMAGE'
+            }
+        );
+
+        // Create and load the image manually
+        const img = new Image();
+        img.src = 'example.jpeg'; // Ensure this path is correct
+        img.crossOrigin = 'anonymous'; // Allow cross-origin requests if needed
+
+        // Wait for the image to be loaded
+        await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+        });
+
+        // Proceed once image is loaded
+        console.log('Image loaded');
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+
+        const imageData = ctx.getImageData(0, 0, img.width, img.height);
+        console.log('Image data:', imageData);
+
+        try {
+            const detections = await faceDetector.detect(imageData);
+            console.log('Detections:', detections);
+        } catch (error) {
+            console.error('Error during face detection:', error);
+        }
+    }
+
+    runFaceDetection();
+</script>
+</html>
