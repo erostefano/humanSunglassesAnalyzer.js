@@ -41,3 +41,5 @@ TODO: model is trained on close ups. it doesnt work nice on webcam. potential fi
 - move this model into a media pipe
 
 TODO: tests show zoom factor is key and facial hair plays a role
+
+TODO: mention prod test set
