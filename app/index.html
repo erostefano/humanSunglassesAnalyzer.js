@@ -12,9 +12,20 @@
 </head>
 <body>
 <h1>Face Detection Example</h1>
-<img id="image" src="img_1.png"> <!-- Hide original image -->
+<img id="image" src="with-sunglasses.png"> <!-- Hide original image -->
 <h2>Detected Face</h2>
 <canvas id="faceCanvas" style="border: 1px solid black;display: none"></canvas>
+<img id="face"/>
+
+<p>
+    Prediction With Sunglasses
+    <span id="predictionWithSunglasses"></span>
+</p>
+
+<p>
+    Prediction Without Sunglasses
+    <span id="predictionWithoutSunglasses"></span>
+</p>
 <script type="module">
     import {FilesetResolver, FaceDetector} from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js';
 
@@ -74,10 +85,8 @@
                 );
 
                 // Optionally create a new image element from the canvas
-                const faceImage = new Image();
+                const faceImage = document.getElementById('face');
                 faceImage.src = faceCanvas.toDataURL();
-                faceImage.id = 'face'
-                document.body.appendChild(faceImage);
 
                 // Load a TensorFlow.js model
                 const model = await tf.loadLayersModel('shared/models/sunglasses/model.json');
@@ -90,15 +99,14 @@
                 // Expand dimensions to match model's input shape (typically [batchSize, height, width, channels])
                 const batchedTensor = normalizedTensor.expandDims(0);
 
-                // Run inference
                 const predictions = await model.predict(batchedTensor);
-// Convert predictions to an array to see the values
                 const predictionsArray = predictions.arraySync();
 
-// Log the predictions
                 console.table(predictionsArray);
+                console.log(predictionsArray);
+                document.getElementById('predictionWithSunglasses').textContent = predictionsArray[0][1]
+                document.getElementById('predictionWithoutSunglasses').textContent = predictionsArray[0][0]
 
-// Dispose of tensors to avoid memory leaks
                 tensor.dispose();
                 resizedTensor.dispose();
                 normalizedTensor.dispose();
