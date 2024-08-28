@@ -28,7 +28,7 @@ label:
 Image 1: 0.8 = with sunglasses, 0.2 = without sunglasses
 ```
 
-TODO: mention param tuning
+TODO: try param tuning -> less layers -> add prod test
 
 TODO: add training/test loss and accuracy, confusion matrix and false negatives, sum up everything
 
