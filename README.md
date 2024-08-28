@@ -28,3 +28,6 @@ TensorFlow.js to run machine learning models directly in the browser, so there's
 * Code needs unit tests
 * e2e Testing
 * Store a sidecar to each model including loss, accuracy and confusion matrix
+* Data preparation:
+  * Brute Force: Train a lot of pictures with different zoom levels etc.
+  * Efficient: Locate the eyes with another model and take a screenshot.
