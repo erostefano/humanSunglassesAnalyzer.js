@@ -31,3 +31,4 @@ TensorFlow.js to run machine learning models directly in the browser, so there's
 * Data preparation:
   * Brute Force: Train a lot of pictures with different zoom levels etc.
   * Efficient: Locate the eyes with another model and take a screenshot.
+* There is no master model -> know your domain and train consequently
