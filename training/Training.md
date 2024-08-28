@@ -39,3 +39,5 @@ TODO: model is trained on close ups. it doesnt work nice on webcam. potential fi
 - fix it in the frontend using a mask and cutting the picture
 - use face-api model to get the face and predict it
 - move this model into a media pipe
+
+TODO: tests show zoom factor is key and facial hair plays a role
