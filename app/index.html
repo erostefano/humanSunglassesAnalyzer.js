@@ -12,7 +12,36 @@
 </head>
 <body>
 <h1>Face Detection Example</h1>
-<img id="image" src="test-images/without-sunglasses-5.jpg"> <!-- Hide original image -->
+
+<label>Select Images
+    <select id="imageSelector">
+        <option value="">From Dataset</option>
+        <option value="test-images/with-sunglasses-1.jpg">with-sunglasses-1.jpg</option>
+        <option value="test-images/with-sunglasses-2.jpg">with-sunglasses-2.jpg</option>
+        <option value="test-images/with-sunglasses-3.jpg">with-sunglasses-3.jpg</option>
+        <option value="test-images/with-sunglasses-4.jpg">with-sunglasses-4.jpg</option>
+        <option value="test-images/with-sunglasses-5.jpg">with-sunglasses-5.jpg</option>
+
+        <option value="test-images/without-sunglasses-1.jpg">without-sunglasses-1.jpg</option>
+        <option value="test-images/without-sunglasses-2.jpg">without-sunglasses-2.jpg</option>
+        <option value="test-images/without-sunglasses-3.jpg">without-sunglasses-3.jpg</option>
+        <option value="test-images/without-sunglasses-4.jpg">without-sunglasses-4.jpg</option>
+        <option value="test-images/without-sunglasses-5.jpg">without-sunglasses-5.jpg</option>
+
+
+        <option value="">From Web</option>
+        <option value="images/with-sunglasses-1.png">with-sunglasses-1.png</option>
+        <option value="images/with-sunglasses-2.png">with-sunglasses-2.png</option>
+        <option value="images/with-sunglasses-3.png">with-sunglasses-3.png</option>
+
+        <option value="images/without-sunglasses-1.png">without-sunglasses-1.png</option>
+        <option value="images/without-sunglasses-2.png">without-sunglasses-2.png</option>
+        <option value="images/without-sunglasses-3.png">without-sunglasses-3.png</option>
+
+    </select>
+</label>
+<br/>
+<img id="image" src="">
 <h2>Detected Face</h2>
 <canvas id="faceCanvas" style="border: 1px solid black;display: none"></canvas>
 <img id="face"/>
@@ -121,7 +150,13 @@
         }
     }
 
-    runFaceDetection();
+    const imageSelector = document.getElementById('imageSelector');
+    const image = document.getElementById('image');
+
+    imageSelector.addEventListener('change', function() {
+        image.src = this.value;
+        runFaceDetection();
+    });
 </script>
 </body>
 </html>
