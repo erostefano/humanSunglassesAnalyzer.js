@@ -37,8 +37,6 @@
         <option value="images/without-sunglasses-1.png">without-sunglasses-1.png</option>
         <option value="images/without-sunglasses-2.png">without-sunglasses-2.png</option>
         <option value="images/without-sunglasses-3.png">without-sunglasses-3.png</option>
-        <option value="images/without-sunglasses-4.png">without-sunglasses-4.png</option>
-        <option value="images/without-sunglasses-5.png">without-sunglasses-5.png</option>
 
     </select>
 </label>
@@ -102,7 +100,7 @@
                 const face = detections.detections[0];
 
 // Expand the bounding box by 10 pixels on each side
-                const padding = 10;
+                const padding = -25;
                 const originX = Math.max(face.boundingBox.originX - padding, 0);
                 const originY = Math.max(face.boundingBox.originY - padding, 0);
                 const width = Math.min(face.boundingBox.width + 2 * padding, img.width - originX);
