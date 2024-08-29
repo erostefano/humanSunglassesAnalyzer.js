@@ -15,6 +15,7 @@ TensorFlow.js to run machine learning models directly in the browser, so there's
 
 * Use cam
 * Show label
+* TODO predicit using mobile net
 
 ## Operation
 
