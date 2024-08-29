@@ -3,31 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Face Detection with TensorFlow.js</title>
-    <script
-            src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js"
-            crossorigin="anonymous"
-            type="module"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script> <!-- Include TensorFlow.js -->
+    <title>MobileNet Prediction</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
 </head>
 <body>
-<h1>Face Detection Example</h1>
-
 <label>Select Images
     <select id="imageSelector">
         <option value="">From Dataset</option>
-        <option value="test-images/with-sunglasses-1.jpg">with-sunglasses-1.jpg</option>
-        <option value="test-images/with-sunglasses-2.jpg">with-sunglasses-2.jpg</option>
-        <option value="test-images/with-sunglasses-3.jpg">with-sunglasses-3.jpg</option>
-        <option value="test-images/with-sunglasses-4.jpg">with-sunglasses-4.jpg</option>
-        <option value="test-images/with-sunglasses-5.jpg">with-sunglasses-5.jpg</option>
+        <option value="kaggle/with-sunglasses-1.jpg">with-sunglasses-1.jpg</option>
+        <option value="kaggle/with-sunglasses-2.jpg">with-sunglasses-2.jpg</option>
+        <option value="kaggle/with-sunglasses-3.jpg">with-sunglasses-3.jpg</option>
+        <option value="kaggle/with-sunglasses-4.jpg">with-sunglasses-4.jpg</option>
+        <option value="kaggle/with-sunglasses-5.jpg">with-sunglasses-5.jpg</option>
 
-        <option value="test-images/without-sunglasses-1.jpg">without-sunglasses-1.jpg</option>
-        <option value="test-images/without-sunglasses-2.jpg">without-sunglasses-2.jpg</option>
-        <option value="test-images/without-sunglasses-3.jpg">without-sunglasses-3.jpg</option>
-        <option value="test-images/without-sunglasses-4.jpg">without-sunglasses-4.jpg</option>
-        <option value="test-images/without-sunglasses-5.jpg">without-sunglasses-5.jpg</option>
-
+        <option value="kaggle/without-sunglasses-1.jpg">without-sunglasses-1.jpg</option>
+        <option value="kaggle/without-sunglasses-2.jpg">without-sunglasses-2.jpg</option>
+        <option value="kaggle/without-sunglasses-3.jpg">without-sunglasses-3.jpg</option>
+        <option value="kaggle/without-sunglasses-4.jpg">without-sunglasses-4.jpg</option>
+        <option value="kaggle/without-sunglasses-5.jpg">without-sunglasses-5.jpg</option>
 
         <option value="">From Web</option>
         <option value="images/with-sunglasses-1.png">with-sunglasses-1.png</option>
@@ -37,132 +31,29 @@
         <option value="images/without-sunglasses-1.png">without-sunglasses-1.png</option>
         <option value="images/without-sunglasses-2.png">without-sunglasses-2.png</option>
         <option value="images/without-sunglasses-3.png">without-sunglasses-3.png</option>
-
     </select>
 </label>
-<br/>
-<img id="image" src="">
-<h2>Detected Face</h2>
-<canvas id="faceCanvas" style="border: 1px solid black;display: none"></canvas>
-<img id="face"/>
+<img id="imagePreview" style="display: none;">
+<p id="prediction"></p>
 
-<p>
-    Prediction With Sunglasses
-    <span id="predictionWithSunglasses"></span>
-</p>
+<script>
+    async function predictImage(image) {
+        const model = await mobilenet.load();
 
-<p>
-    Prediction Without Sunglasses
-    <span id="predictionWithoutSunglasses"></span>
-</p>
-<script type="module">
-    import {FilesetResolver, FaceDetector} from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js';
+        const tensor = tf.browser.fromPixels(image).resizeNearestNeighbor([224, 224]).toFloat();
+        const normalizedTensor = tensor.div(tf.scalar(255)).expandDims(0);
 
-    async function runFaceDetection() {
-        const vision = await FilesetResolver.forVisionTasks(
-            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
-        );
-
-        const faceDetector = await FaceDetector.createFromOptions(
-            vision,
-            {
-                baseOptions: {
-                    modelAssetPath: "shared/models/blaze_face_short_range.tflite"
-                },
-                runningMode: 'IMAGE'
-            }
-        );
-
-        const img = document.getElementById('image');
-        img.crossOrigin = 'anonymous'; // Allow cross-origin requests if needed
-
-        // Wait for the image to be loaded
-        await new Promise((resolve, reject) => {
-            img.onload = resolve;
-            img.onerror = reject;
-        });
-
-        console.log('Image loaded');
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0, img.width, img.height);
-
-        const imageData = ctx.getImageData(0, 0, img.width, img.height);
-        console.log('Image data:', imageData);
-
-        try {
-            const detections = await faceDetector.detect(imageData);
-
-            if (detections && detections.detections.length > 0) {
-                // Assuming the first detection is the face we want
-                const face = detections.detections[0];
-
-// Expand the bounding box by 10 pixels on each side
-                const padding = -25;
-                const originX = Math.max(face.boundingBox.originX - padding, 0);
-                const originY = Math.max(face.boundingBox.originY - padding, 0);
-                const width = Math.min(face.boundingBox.width + 2 * padding, img.width - originX);
-                const height = Math.min(face.boundingBox.height + 2 * padding, img.height - originY);
-
-// Create a new canvas for the face
-                const faceCanvas = document.getElementById('faceCanvas');
-                const faceCtx = faceCanvas.getContext('2d');
-                faceCanvas.width = width;
-                faceCanvas.height = height;
-
-// Draw the face on the new canvas
-                faceCtx.drawImage(
-                    img,
-                    originX, originY, width, height, // Source rectangle
-                    0, 0, width, height // Destination rectangle
-                );
-
-
-                // Optionally create a new image element from the canvas
-                const faceImage = document.getElementById('face');
-                faceImage.src = faceCanvas.toDataURL();
-
-                // Load a TensorFlow.js model
-                const model = await tf.loadLayersModel('shared/models/sunglasses/model.json');
-
-                const tensor = tf.browser.fromPixels(document.getElementById('face'));
-
-                const resizedTensor = tf.image.resizeBilinear(tensor, [224, 224]); // Use your model's input size
-                const normalizedTensor = resizedTensor.toFloat().div(tf.scalar(255)); // Normalize if needed
-
-                // Expand dimensions to match model's input shape (typically [batchSize, height, width, channels])
-                const batchedTensor = normalizedTensor.expandDims(0);
-
-                const predictions = await model.predict(batchedTensor);
-                const predictionsArray = predictions.arraySync();
-
-                console.table(predictionsArray);
-                console.log(predictionsArray);
-                document.getElementById('predictionWithSunglasses').textContent = predictionsArray[0][0]
-                document.getElementById('predictionWithoutSunglasses').textContent = predictionsArray[0][1]
-
-                tensor.dispose();
-                resizedTensor.dispose();
-                normalizedTensor.dispose();
-                batchedTensor.dispose();
-                predictions.dispose();
-
-            } else {
-                console.log('No faces detected');
-            }
-        } catch (error) {
-            console.error('Error during face detection:', error);
-        }
+        return await model.classify(normalizedTensor);
     }
 
-    const imageSelector = document.getElementById('imageSelector');
-    const image = document.getElementById('image');
+    document.getElementById('imageSelector').addEventListener('change', async (event) => {
+        const image = document.getElementById('imagePreview');
+        image.src = event.target.value;
+        image.style.display = 'block';
 
-    imageSelector.addEventListener('change', function() {
-        image.src = this.value;
-        runFaceDetection();
+        const predictions = await predictImage(image);
+        console.log('predicted', predictions)
+        document.getElementById('prediction').textContent = JSON.stringify(predictions);
     });
 </script>
 </body>
