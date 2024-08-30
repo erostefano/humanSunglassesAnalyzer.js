@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Replace with your folder path
-const folderPath = 'with-sunglasses';
+const folderPath = 'without-sunglasses';
 
 // Function to randomly shuffle an array
 function shuffle(array) {
@@ -36,7 +36,7 @@ fs.readdir(folderPath, (err, files) => {
     // Second pass: Rename from temporary names to final names
     files.forEach((file, index) => {
         const tempFileName = `tempfile-${index}${path.extname(file)}`;
-        const finalFileName = `with-sunglasses-${index + 1}${path.extname(file)}`;
+        const finalFileName = `without-sunglasses-${index + 1}${path.extname(file)}`;
         const tempPath = path.join(folderPath, tempFileName);
         const finalPath = path.join(folderPath, finalFileName);
 
