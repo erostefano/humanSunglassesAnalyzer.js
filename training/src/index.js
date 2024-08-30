@@ -13,7 +13,7 @@ const {labelsWithEncoding} = require("./labels");
     const history = await cnn.fit(xTrain, yTrain, {
         epochs: 10,                                                  // Number of epochs
         batchSize: 32,                                              // Number of samples per gradient update
-        callbacks: tf.callbacks.earlyStopping({patience: 3})   // Optional: stops training early if no improvement
+        callbacks: tf.callbacks.earlyStopping({monitor: 'acc', patience: 3})
     });
 
     logger.info('Training completed');

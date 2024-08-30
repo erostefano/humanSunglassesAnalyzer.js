@@ -78,7 +78,7 @@ function augmentImages(images) {
 
             return [
                 image,                  // Original image
-                unbatchedFlippedImage,  // Flipped image
+//                unbatchedFlippedImage,  // Flipped image
             ];
         })
         .flat(); // Flatten the nested arrays
